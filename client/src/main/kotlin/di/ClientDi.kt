@@ -1,5 +1,6 @@
 package di
 
+import ClientApp
 import FileManager
 import Frame
 import org.koin.dsl.module
