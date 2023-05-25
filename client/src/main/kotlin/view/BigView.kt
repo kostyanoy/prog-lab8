@@ -1,11 +1,13 @@
 
-import controllers.BigController
+import controllers.AuthController
+import controllers.MainController
 import javafx.geometry.Pos
 import tornadofx.*
 import view.SettingsView
 
 class BigView : View("Authorization window") {
-    private val bigController: BigController by inject()
+    private val mainController: MainController by inject()
+    private val authController: AuthController by inject()
 init {
     primaryStage.width = 1000.0
     primaryStage.height = 700.0
@@ -31,7 +33,7 @@ init {
                     button("Выход") {
                         addClass(Styles.exit)
                         action {
-//                            bigController.exit()
+                            mainController.disconnect()
                             replaceWith<MainView>()
                         }
                     }
@@ -68,10 +70,9 @@ init {
 
                     label("  Имя пользователя  ") {
                         addClass(Styles.label2)
-                        textfield {
-                            addClass(Styles.textField)
-                            textProperty().bind(bigController.username)
-                        }
+                    }
+                    label(authController.username){
+                        addClass(Styles.label2)
                     }
                 }
             }

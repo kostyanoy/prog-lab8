@@ -5,9 +5,4 @@ import tornadofx.Controller
 
 class BigController : Controller() {
     val username = SimpleStringProperty()
-
-
-    fun exit() {
-        TODO("реализация отключения клиента")
-    }
 }

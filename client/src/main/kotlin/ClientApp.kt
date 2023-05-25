@@ -53,6 +53,7 @@ class ClientApp(var serverAddress: String = "localhost", var serverPort: Int = 2
             logger.info { "Попытка закрытия канала. Канала не существует." }
             return
         }
+        sendFrame(Frame(FrameType.EXIT))
         channel?.close()
         channel = null
         logger.info { "Канал закрыт" }

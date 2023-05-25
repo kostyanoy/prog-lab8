@@ -3,18 +3,17 @@ package controllers
 import CommandResult
 import Frame
 import FrameType
+import javafx.beans.property.SimpleStringProperty
 
 class AuthController : ClientController() {
-    private val bigController: BigController by inject()
+    val username = SimpleStringProperty()
 
-    fun login(login: String, password: String) : Boolean {
-        bigController.username.value = login
-        return interact("login", login, password)
-    }
+    fun login(login: String, password: String) : Boolean = interact("login", login, password)
 
     fun register(login: String, password: String) : Boolean = interact("register", login, password)
 
     private fun interact(command: String, login: String, password: String): Boolean {
+        username.value = login
         val frame = Frame(FrameType.AUTHORIZE_REQUEST)
         frame.setValue("login", login)
         frame.setValue("password", password)

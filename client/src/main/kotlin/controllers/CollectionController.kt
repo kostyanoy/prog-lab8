@@ -6,9 +6,7 @@ import serialize.Serializer
 
 class CollectionController : ClientController() {
     private val serializer: Serializer<LinkedHashMap<Int, MusicBand>> by inject<Serializer<LinkedHashMap<Int, MusicBand>>>()
-    private var collection: LinkedHashMap<Int, MusicBand> = LinkedHashMap()
-
-    fun getCollection() = collection.clone() as LinkedHashMap<*, *>
+    var collection: LinkedHashMap<Int, MusicBand> = LinkedHashMap()
 
     fun updateCollection(): Boolean {
         when (val res = executeCommand("show", arrayOf())) {
