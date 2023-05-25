@@ -1,4 +1,4 @@
-package Controllers
+package controllers
 
 import tornadofx.Controller
 
@@ -7,7 +7,7 @@ class AuthController: Controller() {
         TODO("сделать реализацию логина")
     }
     fun register(){
-        TODO("сделать реализацию регистрации")
+        TODO("сделать реализацию регистрации ")
 
     }
 }

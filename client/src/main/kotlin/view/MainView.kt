@@ -1,5 +1,5 @@
 
-import Controllers.MainController
+import controllers.MainController
 import javafx.geometry.Pos
 import tornadofx.*
 
