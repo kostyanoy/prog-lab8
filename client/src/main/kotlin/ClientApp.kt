@@ -77,14 +77,15 @@ class ClientApp(var serverAddress: String = "localhost", var serverPort: Int = 2
      *
      * @param frame which should be sent
      */
-    fun sendFrame(frame: Frame) {
+    fun sendFrame(frame: Frame) : Boolean {
         if (channel == null) {
             logger.info { "Попытка отправки сообщения на канал. Канала не существует." }
-            return
+            return false
         }
         val s = frameSerializer.serialize(frame) + "\n"
         channel?.socket()?.getOutputStream()?.write(s.toByteArray())
         logger.info { "Отправлен запрос на сервер ${frame.type}" }
+        return true
     }
 
     /**

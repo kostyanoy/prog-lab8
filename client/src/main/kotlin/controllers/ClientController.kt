@@ -6,8 +6,10 @@ import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import tornadofx.*
+import utils.CommandManager
 
 open class ClientController : Controller(), KoinComponent {
+    private val commandManager: CommandManager by inject<CommandManager>()
     protected val client: ClientApp by inject<ClientApp>()
     private var token = ""
 
@@ -23,4 +25,6 @@ open class ClientController : Controller(), KoinComponent {
     }
 
     fun sendFrame(frame: Frame) = client.sendFrame(frame)
+
+    fun executeCommand(command: String, args: Array<Any>) = commandManager.executeCommand(client, token, command, args)
 }
