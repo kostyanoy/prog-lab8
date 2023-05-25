@@ -1,10 +1,11 @@
 
+import controllers.BigController
 import javafx.geometry.Pos
 import tornadofx.*
 import view.SettingsView
 
 class BigView : View("Authorization window") {
-//    private val bigController: BigController by inject()
+    private val bigController: BigController by inject()
 init {
     primaryStage.width = 1000.0
     primaryStage.height = 700.0
@@ -69,7 +70,7 @@ init {
                         addClass(Styles.label2)
                         textfield {
                             addClass(Styles.textField)
-                            // textProperty().bind(bigController.username) реализовать в конроллере, чтобы отображалось имя пользователя(я привела просто пример свойства)
+                            textProperty().bind(bigController.username)
                         }
                     }
                 }

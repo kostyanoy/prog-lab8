@@ -5,7 +5,12 @@ import Frame
 import FrameType
 
 class AuthController : ClientController() {
-    fun login(login: String, password: String) : Boolean = interact("login", login, password)
+    private val bigController: BigController by inject()
+
+    fun login(login: String, password: String) : Boolean {
+        bigController.username.value = login
+        return interact("login", login, password)
+    }
 
     fun register(login: String, password: String) : Boolean = interact("register", login, password)
 

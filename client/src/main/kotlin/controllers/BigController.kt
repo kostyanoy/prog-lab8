@@ -1,13 +1,11 @@
 package controllers
 
-import javafx.beans.property.StringProperty
+import javafx.beans.property.SimpleStringProperty
 import tornadofx.Controller
 
 class BigController : Controller() {
-    val username: StringProperty
-        get() {
-            TODO("здесь должно быть имя пользователя")
-        }
+    val username = SimpleStringProperty()
+
 
     fun exit() {
         TODO("реализация отключения клиента")

@@ -16,7 +16,7 @@ class MainView : View("Connection window") {
         button("Конечно!") {
             addClass(Styles.button)
             action {
-//                mainController.connect()
+                mainController.connect()
                 replaceWith<AuthView>()
             }
         }

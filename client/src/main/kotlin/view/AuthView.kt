@@ -1,13 +1,27 @@
-
 import controllers.AuthController
-import controllers.MainController
 import javafx.geometry.Pos
-import tornadofx.*
+import tornadofx.View
+import tornadofx.action
+import tornadofx.addClass
+import tornadofx.borderpane
+import tornadofx.button
+import tornadofx.center
+import tornadofx.hbox
+import tornadofx.importStylesheet
+import tornadofx.label
+import tornadofx.paddingRight
+import tornadofx.passwordfield
+import tornadofx.px
+import tornadofx.style
+import tornadofx.textfield
+import tornadofx.top
+import tornadofx.vbox
+
 class AuthView : View("Authorization window") {
-//    private val mainController: MainController by inject()
+    //    private val mainController: MainController by inject()
     private val authController: AuthController by inject()
 
-    override val root = borderpane  {
+    override val root = borderpane {
         importStylesheet<Styles>()
         addClass(Styles.base)
         top {
@@ -42,7 +56,7 @@ class AuthView : View("Authorization window") {
                 button("Войти") {
                     addClass(Styles.button)
                     action {
-                        // authController.login()
+                        authController.login("123", "123")
                         replaceWith<BigView>()
 
                     }
