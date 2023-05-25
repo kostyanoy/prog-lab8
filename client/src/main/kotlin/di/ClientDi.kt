@@ -41,4 +41,8 @@ val clientModule = module {
     single<Interactor> {
         InteractionManager(userManager = get(), fileManager = get(), commandManager = get(), AuthState())
     }
+
+    single {
+        ClientApp()
+    }
 }

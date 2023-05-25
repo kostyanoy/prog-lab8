@@ -1,9 +1,9 @@
 package controllers
 
-import tornadofx.Controller
+import org.koin.core.component.KoinComponent
 
-class MainController : Controller() {
-    fun connect(){
-        TODO("сделать старт клиента(connect")
-    }
+class MainController : KoinComponent, ClientController() {
+    fun connect(): Boolean = client.start()
+
+    fun disconnect() = client.stop()
 }

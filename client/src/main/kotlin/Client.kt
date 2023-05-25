@@ -25,7 +25,7 @@ fun main(args: Array<String>) {
     // exit    - stops the application
 //    var command = "connect"
 
-    MyApp().main(arrayOf())
+    MyApp().main("localhost", 2228)
 //    while (command != "exit") {
 //        if (command == "connect") {
 //            ClientApp("localhost", serverPort).start()
