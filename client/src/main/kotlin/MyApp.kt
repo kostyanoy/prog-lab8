@@ -7,8 +7,8 @@ import tornadofx.launch
 
 class MyApp(): App(MainView::class), KoinComponent{
     override fun start(stage: Stage) {
-        stage.width = 900.0
-        stage.height = 500.0
+        stage.width = 1000.0
+        stage.height = 700.0
         super.start(stage)
     }
     fun main(address: String, port: Int) {

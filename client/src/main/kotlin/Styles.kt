@@ -9,7 +9,9 @@ class Styles : Stylesheet() {
         val button by cssclass()
         val textField by cssclass()
         val base by cssclass()
-        val back by cssclass()
+        val exit by cssclass()
+        val settings by cssclass()
+
     }
 
     init {
@@ -45,11 +47,21 @@ class Styles : Stylesheet() {
             textFill = c("#867666")
             fontSize = 16.px
         }
-        back{
-            fontSize = 16.px
+        exit{
+            fontSize = 12.px
             padding = box(5.px, 10.px)
             textFill = c("#CDAB81")
-            prefWidth = 80.px
+            prefWidth = 60.px
+            backgroundColor += c("#403A37")
+
+        }
+        settings{
+            fontSize = 12.px
+            padding = box(5.px, 10.px)
+            textFill = c("#CDAB81")
+            prefWidth = 90.px
+            backgroundColor += c("#403A37")
+
         }
     }
 }
