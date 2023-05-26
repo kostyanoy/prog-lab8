@@ -1,4 +1,6 @@
+package view
 
+import Styles
 import controllers.MainController
 import javafx.geometry.Pos
 import tornadofx.*

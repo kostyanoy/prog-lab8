@@ -1,17 +1,25 @@
+package view
 
+import Styles
 import controllers.AuthController
 import controllers.MainController
 import javafx.geometry.Pos
 import tornadofx.*
-import view.SettingsView
 
 class BigView : View("Authorization window") {
     private val mainController: MainController by inject()
     private val authController: AuthController by inject()
-init {
-    primaryStage.width = 1000.0
-    primaryStage.height = 700.0
-}
+
+    private val listView: ListView by inject()
+    private val commandsView: CommandsView by inject()
+    private val settingsView: SettingsView by inject()
+
+
+    init {
+        primaryStage.width = 1000.0
+        primaryStage.height = 700.0
+    }
+
     override val root = borderpane {
         importStylesheet<Styles>()
         addClass(Styles.base)
@@ -27,7 +35,7 @@ init {
                     button("Настройки") {
                         addClass(Styles.settings)
                         action {
-                            replaceWith<SettingsView>()
+                            center = settingsView.root
                         }
                     }
                     button("Выход") {
@@ -49,7 +57,7 @@ init {
                     button("Список") {
                         addClass(Styles.button)
                         action {
-
+                            center = listView.root
                         }
                     }
 
@@ -63,15 +71,14 @@ init {
                     button("Команды") {
                         addClass(Styles.button)
                         action {
-
-
+                            center = commandsView.root
                         }
                     }
 
                     label("  Имя пользователя  ") {
                         addClass(Styles.label2)
                     }
-                    label(authController.username){
+                    label(authController.username) {
                         addClass(Styles.label2)
                     }
                 }

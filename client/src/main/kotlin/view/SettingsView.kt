@@ -1,18 +1,11 @@
 package view
 
-import BigView
 import Styles
-import controllers.SettingsController
 import javafx.geometry.Pos
 import tornadofx.*
 
 class SettingsView : View("Settings window") {
-    private val settingsController: SettingsController by inject()
-
-    init {
-        primaryStage.width = 600.0
-        primaryStage.height = 200.0
-    }
+//    private val settingsController: SettingsController by inject()
 
     override val root = borderpane {
         importStylesheet<Styles>()
@@ -28,16 +21,6 @@ class SettingsView : View("Settings window") {
 
                     label("Настройки") {
                         addClass(Styles.label1)
-                    }
-
-                    hbox {
-                        alignment = Pos.TOP_RIGHT
-                        button("Назад") {
-                            addClass(Styles.exit)
-                            action {
-                                replaceWith<BigView>()
-                            }
-                        }
                     }
                 }
             }
