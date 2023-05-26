@@ -1,5 +1,6 @@
 package view
 
+import MapView
 import Styles
 import javafx.geometry.Pos
 import tornadofx.*
@@ -9,6 +10,8 @@ class BigView : View("Authorization window") {
     private val listView: ListView by inject()
     private val commandsView: CommandsView by inject()
     private val settingsView: SettingsView by inject()
+    private val mapView: MapView by inject()
+
 
 
     init {
@@ -61,7 +64,7 @@ class BigView : View("Authorization window") {
                     button("Карта") {
                         addClass(Styles.button)
                         action {
-
+                            center = mapView.root
                         }
                     }
 
