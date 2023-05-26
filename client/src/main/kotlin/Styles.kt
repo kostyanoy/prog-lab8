@@ -11,7 +11,6 @@ class Styles : Stylesheet() {
         val base by cssclass()
         val exit by cssclass()
         val settings by cssclass()
-
     }
 
     init {
@@ -40,7 +39,7 @@ class Styles : Stylesheet() {
 
         textField {
             prefWidth = 200.px
-            maxWidth = 300.px
+            maxWidth = 400.px
             padding = box(10.px)
             borderRadius += box(5.px)
             backgroundColor += c("#EAE2D6")

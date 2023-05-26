@@ -1,11 +1,18 @@
+package view
 
+import Styles
 import javafx.geometry.Pos
 import tornadofx.*
-import view.SettingsView
 
 class BigView : View("Authorization window") {
 //    private val bigController: BigController by inject()
-init {
+private val listView: ListView by inject()
+    private val commandsView: CommandsView by inject()
+    private val settingsView: SettingsView by inject()
+
+
+
+    init {
     primaryStage.width = 1000.0
     primaryStage.height = 700.0
 }
@@ -24,7 +31,7 @@ init {
                     button("Настройки") {
                         addClass(Styles.settings)
                         action {
-                            replaceWith<SettingsView>()
+                            center = settingsView.root
                         }
                     }
                     button("Выход") {
@@ -46,6 +53,7 @@ init {
                     button("Список") {
                         addClass(Styles.button)
                         action {
+                            center = listView.root
 
                         }
                     }
@@ -60,8 +68,7 @@ init {
                     button("Команды") {
                         addClass(Styles.button)
                         action {
-
-
+                            center = commandsView.root
                         }
                     }
 

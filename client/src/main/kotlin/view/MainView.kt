@@ -1,4 +1,6 @@
+package view
 
+import Styles
 import controllers.MainController
 import javafx.geometry.Pos
 import tornadofx.*
@@ -16,7 +18,7 @@ class MainView : View("Connection window") {
         button("Конечно!") {
             addClass(Styles.button)
             action {
-//                mainController.connect()
+                mainController.connect()
                 replaceWith<AuthView>()
             }
         }
