@@ -5,17 +5,17 @@ import javafx.geometry.Pos
 import tornadofx.*
 
 class BigView : View("Authorization window") {
-//    private val bigController: BigController by inject()
-private val listView: ListView by inject()
+    //    private val bigController: BigController by inject()
+    private val listView: ListView by inject()
     private val commandsView: CommandsView by inject()
     private val settingsView: SettingsView by inject()
 
 
-
     init {
-    primaryStage.width = 1000.0
-    primaryStage.height = 700.0
-}
+        primaryStage.width = 1000.0
+        primaryStage.height = 700.0
+    }
+
     override val root = borderpane {
         importStylesheet<Styles>()
         addClass(Styles.base)
