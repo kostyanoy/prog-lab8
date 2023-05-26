@@ -32,20 +32,20 @@ class AuthView : View("Authorization window") {
                 label("Логин:") {
                     addClass(Styles.label2)
                 }
-                textfield {
+                val login = textfield {
                     addClass(Styles.textField)
                 }
 
                 label("Пароль:") {
                     addClass(Styles.label2)
                 }
-                passwordfield {
+                val password = passwordfield {
                     addClass(Styles.textField)
                 }
                 button("Войти") {
                     addClass(Styles.button)
                     action {
-                        authController.login("123", "123")
+                        authController.login(login.text, password.text)
                         replaceWith<BigView>()
 
                     }

@@ -1,7 +1,7 @@
 import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import serialize.Serializer
+import serialize.FrameSerializer
 import utils.CommandManager
 import utils.auth.UserStatus
 import utils.auth.token.Content
@@ -34,7 +34,7 @@ class ServerApp(
     private val gatewayPort: Int
 ) : KoinComponent {
     private val commandManager by inject<CommandManager>()
-    private val frameSerializer by inject<Serializer<Frame>>()
+    private val frameSerializer by inject<FrameSerializer>()
     private var isActive = true
     private val tokenManager by inject<Tokenizer>()
 

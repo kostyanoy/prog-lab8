@@ -1,13 +1,11 @@
 package di
 
 import FileManager
-import Frame
 import commands.CommandHistory
 import data.MusicBand
 import org.koin.dsl.module
 import serialize.FrameSerializer
 import serialize.SerializeManager
-import serialize.Serializer
 import utils.CommandManager
 import utils.FileSaver
 import utils.Saver
@@ -31,10 +29,10 @@ val serverModule = module {
     }
 
     // serialization
-    single<Serializer<LinkedHashMap<Int, MusicBand>>> {
+    single {
         SerializeManager()
     }
-    factory<Serializer<Frame>> {
+    factory {
         FrameSerializer()
     }
 

@@ -2,15 +2,14 @@ package commands
 
 import ArgumentType
 import CommandResult
-import data.MusicBand
 import org.koin.core.component.inject
-import serialize.Serializer
+import serialize.SerializeManager
 
 /**
  * The command outputs all the elements of the collection in a string representation to the standard output stream
  */
 class Show : StorageCommand() {
-    private val serializer : Serializer<LinkedHashMap<Int, MusicBand>> by inject()
+    private val serializer: SerializeManager by inject()
 
     override fun getDescription(): String =
         "show : вывести в стандартный поток вывода все элементы коллекции в строковом представлении"
