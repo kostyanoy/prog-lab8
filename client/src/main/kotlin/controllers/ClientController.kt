@@ -2,18 +2,15 @@ package controllers
 
 import ClientApp
 import Frame
-import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import tornadofx.*
 import utils.CommandManager
 
-open class ClientController : Controller(), KoinComponent {
+open class ClientController : BaseController(), KoinComponent {
     private val commandManager: CommandManager by inject<CommandManager>()
-    protected val client: ClientApp by inject<ClientApp>()
     private var token = ""
 
-    protected val logger = KotlinLogging.logger {}
+    val client: ClientApp by inject<ClientApp>()
 
     fun setToken(token: String) {
         this.token = token

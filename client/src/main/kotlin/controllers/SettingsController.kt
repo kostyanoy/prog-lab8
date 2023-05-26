@@ -1,11 +1,15 @@
 package controllers
 
 import javafx.beans.property.SimpleObjectProperty
+import javafx.scene.control.Labeled
+import org.jetbrains.annotations.PropertyKey
 import tornadofx.*
 import java.util.*
 
-class SettingsController : Controller() {
-    private val currentLocaleProperty = SimpleObjectProperty(Locale.getDefault())
+class SettingsController : BaseController() {
+    companion object {
+        val currentLocaleProperty = SimpleObjectProperty(Locale.getDefault())
+    }
 
     init {
         // Привязываем текущий язык к ResourceBundle messages
@@ -16,7 +20,18 @@ class SettingsController : Controller() {
         }
     }
 
-    fun change(lang: String) {
-        currentLocaleProperty.set(Locale(lang))
+    fun getMessage(@PropertyKey(resourceBundle = "messages") key: String) = messages[key]
+
+    fun createStringBinding(@PropertyKey(resourceBundle = "messages") key: String, labeled: Labeled) {
+        labeled.text = getMessage(key)
+        currentLocaleProperty.addListener { _, _, _ ->
+            labeled.text = getMessage(key)
+        }
     }
+
+    fun change(lang: String) {
+        val locale = if (lang == "ru") Locale.getDefault() else Locale(lang)
+        currentLocaleProperty.set(locale)
+    }
+
 }

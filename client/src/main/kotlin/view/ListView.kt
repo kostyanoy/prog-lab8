@@ -8,19 +8,22 @@ import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
 import tornadofx.*
+
 class ListView : View() {
     private val collectionController: CollectionController by inject()
     private val musicBands = FXCollections.observableArrayList<MusicBand>()
 
     override fun onDock() {
         super.onDock()
-        collectionController.updateCollection()
+//        collectionController.updateCollection()
     }
 
 
     override val root = borderpane {
         importStylesheet<Styles>()
         addClass(Styles.base)
+
+        label(collectionController.error) //style this
 
         center = tableview(musicBands) {
             column("ID", MusicBand::idProperty)
@@ -33,9 +36,19 @@ class ListView : View() {
             column("Best Album", MusicBand::bestAlbumProperty)
             column("Creation Time", MusicBand::creationTimeProperty)
             column("Owner", MusicBand::ownerProperty)
-
-            collectionController.getCollection().values.forEach { musicBands.add(it as MusicBand?) }
         }
+
+        left = button("Обновить таблицу") {
+            action {
+                collectionController.updateCollection()
+                updateTable()
+            }
+        }
+    }
+
+    private fun updateTable() {
+        musicBands.clear()
+        collectionController.getCollection().values.forEach { musicBands.add(it as MusicBand?) }
     }
 }
 

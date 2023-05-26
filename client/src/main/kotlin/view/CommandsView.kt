@@ -1,14 +1,26 @@
 package  view
-import Styles
-import javafx.geometry.Pos
-import tornadofx.*
 
-class CommandsView : View("Settings window") {
-    private val allView: AllView by inject()
-    private val keyView: KeyView by inject()
-    private val filterView: FilterView by inject()
-    private val removeGreaterView: RemoveGreaterView by inject()
-    private val descriptionView: DescriptionView by inject()
+import ArgumentType
+import Styles
+import controllers.CommandsController
+import javafx.geometry.Pos
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import tornadofx.*
+import utils.CommandManager
+
+class CommandsView : View("Settings window"), KoinComponent {
+    private val allView: CommandView.AllView by inject()
+    private val keyView: CommandView.KeyView by inject()
+    private val filterView: CommandView.FilterView by inject()
+    private val removeGreaterView: CommandView.RemoveGreaterView by inject()
+    private val descriptionView: CommandView.DescriptionView by inject()
+    private val emptyView: CommandView.EmptyView by inject()
+
+    private val commandsController: CommandsController by inject()
+    private val commandManager: CommandManager by inject<CommandManager>()
+
+    private var current: String? = null
 
     init {
         primaryStage.width = 1000.0
@@ -22,60 +34,81 @@ class CommandsView : View("Settings window") {
         top {
             left {
                 vbox(spacing = 5) {
+                    label(commandsController.error) //style this
+                    label(commandsController.output) //style this
                     label("Команды") {
                         addClass(Styles.label2)
                     }
                     button("Clear") {
                         addClass(Styles.button)
                         action {
+                            center = emptyView.root
+                            current = "clear"
+                            commandsController.clearFields()
                         }
                     }
                     button("CountGreaterThanDescription") {
                         addClass(Styles.button)
                         action {
                             center = descriptionView.root
+                            current = "count_greater_than_description"
+                            commandsController.clearFields()
                         }
                     }
                     button("FilterLessThanGenre") {
                         addClass(Styles.button)
                         action {
                             center = filterView.root
+                            current = "filter_less_than_genre"
+                            commandsController.clearFields()
                         }
                     }
                     button("Insert") {
                         addClass(Styles.button)
                         action {
                             center = allView.root
+                            current = "insert"
+                            commandsController.clearFields()
                         }
                     }
                     button("RemoveGreater") {
                         addClass(Styles.button)
                         action {
                             center = removeGreaterView.root
+                            current = "remove_greater"
+                            commandsController.clearFields()
                         }
                     }
                     button("RemoveGreaterKey") {
                         addClass(Styles.button)
                         action {
                             center = keyView.root
+                            current = "remove_greater_key"
+                            commandsController.clearFields()
                         }
                     }
                     button("RemoveKey") {
                         addClass(Styles.button)
                         action {
                             center = keyView.root
+                            current = "remove_key"
+                            commandsController.clearFields()
                         }
                     }
                     button("ReplaceIfLowe") {
                         addClass(Styles.button)
                         action {
                             center = allView.root
+                            current = "replace_if_lowe"
+                            commandsController.clearFields()
                         }
                     }
                     button("Update") {
                         addClass(Styles.button)
                         action {
                             center = allView.root
+                            current = "update"
+                            commandsController.clearFields()
                         }
                     }
                 }
@@ -88,6 +121,9 @@ class CommandsView : View("Settings window") {
                     button("Отправить") {
                         addClass(Styles.button)
                         action {
+                            if (current != null){
+                                commandsController.sendCommand(current!!, commandManager.getArgs(current!!))
+                            }
                         }
                     }
                 }
@@ -96,190 +132,253 @@ class CommandsView : View("Settings window") {
     }
 }
 
-class FilterView : View() {
-    override val root = vbox {
-        importStylesheet<Styles>()
-        addClass(Styles.base)
+sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
+    protected val commandsController: CommandsController by inject()
 
-        hbox {
-            label("Введите жанр (PROGRESSIVE_ROCK, HIP_HOP, PSYCHEDELIC_CLOUD_RAP, SOUL, POST_PUNK): ") {
-                addClass(Styles.label2)
+    class EmptyView : CommandView(arrayOf()) {
+        override val root = vbox {
+            importStylesheet<Styles>()
+            addClass(Styles.base)
+
+            hbox {
+                label("Вы уверены?") {
+                    addClass(Styles.label2)
+                }
             }
-            textfield()
+        }
+    }
+
+    class FilterView : CommandView(arrayOf(ArgumentType.GENRE)) {
+        override val root = vbox {
+            importStylesheet<Styles>()
+            addClass(Styles.base)
+
+            hbox {
+                label("Введите жанр (PROGRESSIVE_ROCK, HIP_HOP, PSYCHEDELIC_CLOUD_RAP, SOUL, POST_PUNK): ") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.genre)
+                }
+            }
+        }
+    }
+
+    class KeyView : CommandView(arrayOf(ArgumentType.INT)) {
+        override val root = vbox {
+            importStylesheet<Styles>()
+            addClass(Styles.base)
+
+            hbox {
+                label("Вы должны ввести аргумент типа число:") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.key)
+                }
+            }
+        }
+    }
+
+    class RemoveGreaterView : CommandView(arrayOf(ArgumentType.MUSIC_BAND)) {
+        override val root = vbox(spacing = 5) {
+            importStylesheet<Styles>()
+            addClass(Styles.base)
+            hbox {
+                label("Введите название банды:") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.name)
+                }
+            }
+
+            hbox {
+                label("Введите координату Х (<=552):") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.x)
+                }
+            }
+
+            hbox {
+                label("Введите координату Y:") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.y)
+                }
+            }
+
+            hbox {
+                label("Введите количество участников:") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.participants)
+                }
+            }
+
+            hbox {
+                label("Введите количество альбомов (может быть пустым):") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.albums)
+                }
+            }
+
+            hbox {
+                label("Введите описание банды:") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.description)
+                }
+            }
+
+            hbox {
+                label("Введите жанр (PROGRESSIVE_ROCK, HIP_HOP, PSYCHEDELIC_CLOUD_RAP, SOUL, POST_PUNK): ") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.genre)
+                }
+            }
+
+            hbox {
+                label("Введите название лучшего альбома (может быть пустым):") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.bestAlbumName)
+                }
+            }
+
+            hbox {
+                label("Введите длительность альбома:") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.bestAlbumLength)
+                }
+            }
+        }
+    }
+
+    class DescriptionView : CommandView(arrayOf(ArgumentType.STRING)) {
+        override val root = vbox {
+            importStylesheet<Styles>()
+            addClass(Styles.base)
+
+            hbox {
+                label("Вы должны ввести аргумент типа строка:") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.description)
+                }
+            }
+        }
+    }
+
+    class AllView : CommandView(arrayOf(ArgumentType.INT, ArgumentType.MUSIC_BAND)) {
+        override val root = vbox(spacing = 5) {
+            importStylesheet<Styles>()
+            addClass(Styles.base)
+
+            hbox {
+                label("Вы должны ввести аргумент типа число:") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.key)
+                }
+            }
+
+            hbox {
+                label("Введите название банды:") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.name)
+                }
+            }
+
+            hbox {
+                label("Введите координату Х (<=552):") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.x)
+                }
+            }
+
+            hbox {
+                label("Введите координату Y:") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.y)
+                }
+            }
+
+            hbox {
+                label("Введите количество участников:") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.participants)
+                }
+            }
+
+            hbox {
+                label("Введите количество альбомов (может быть пустым):") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.albums)
+                }
+            }
+
+            hbox {
+                label("Введите описание банды:") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.description)
+                }
+            }
+
+            hbox {
+                label("Введите жанр (PROGRESSIVE_ROCK, HIP_HOP, PSYCHEDELIC_CLOUD_RAP, SOUL, POST_PUNK): ") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.genre)
+                }
+            }
+
+            hbox {
+                label("Введите название лучшего альбома (может быть пустым):") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.bestAlbumName)
+                }
+            }
+
+            hbox {
+                label("Введите длительность альбома:") {
+                    addClass(Styles.label2)
+                }
+                textfield() {
+                    textProperty().bindBidirectional(commandsController.bestAlbumLength)
+                }
+            }
         }
     }
 }
 
-class KeyView : View() {
-    override val root = vbox {
-        importStylesheet<Styles>()
-        addClass(Styles.base)
 
-        hbox {
-            label("Вы должны ввести аргумент типа число:") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-    }
-}
-
-class RemoveGreaterView : View() {
-    override val root = vbox(spacing = 5) {
-        importStylesheet<Styles>()
-        addClass(Styles.base)
-        hbox {
-            label("Введите название банды:") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-
-        hbox {
-            label("Введите координату Х (<=552):") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-
-        hbox {
-            label("Введите координату Y:") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-
-        hbox {
-            label("Введите количество участников:") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-
-        hbox {
-            label("Введите количество альбомов (может быть пустым):") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-
-        hbox {
-            label("Введите описание банды:") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-
-        hbox {
-            label("Введите жанр (PROGRESSIVE_ROCK, HIP_HOP, PSYCHEDELIC_CLOUD_RAP, SOUL, POST_PUNK): ") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-
-        hbox {
-            label("Введите название лучшего альбома (может быть пустым):") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-
-        hbox {
-            label("Введите длительность альбома:") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-    }
-}
-
-class DescriptionView : View() {
-    override val root = vbox {
-        importStylesheet<Styles>()
-        addClass(Styles.base)
-
-        hbox {
-            label("Вы должны ввести аргумент типа строка:") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-    }
-}
-
-class AllView : View() {
-    override val root = vbox(spacing = 5) {
-        importStylesheet<Styles>()
-        addClass(Styles.base)
-
-        hbox {
-            label("Вы должны ввести аргумент типа число:") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-
-        hbox {
-            label("Введите название банды:") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-
-        hbox {
-            label("Введите координату Х (<=552):") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-
-        hbox {
-            label("Введите координату Y:") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-
-        hbox {
-            label("Введите количество участников:") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-
-        hbox {
-            label("Введите количество альбомов (может быть пустым):") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-
-        hbox {
-            label("Введите описание банды:") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-
-        hbox {
-            label("Введите жанр (PROGRESSIVE_ROCK, HIP_HOP, PSYCHEDELIC_CLOUD_RAP, SOUL, POST_PUNK): ") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-
-        hbox {
-            label("Введите название лучшего альбома (может быть пустым):") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-
-        hbox {
-            label("Введите длительность альбома:") {
-                addClass(Styles.label2)
-            }
-            textfield()
-        }
-    }
-}

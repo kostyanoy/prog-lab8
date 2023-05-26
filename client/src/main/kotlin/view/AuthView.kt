@@ -29,6 +29,7 @@ class AuthView : View("Authorization window") {
         }
         center {
             vbox {
+                label(authController.error)  //style this
                 label("Логин:") {
                     addClass(Styles.label2)
                 }
@@ -47,13 +48,12 @@ class AuthView : View("Authorization window") {
                     action {
                         authController.login(login.text, password.text)
                         replaceWith<BigView>()
-
                     }
                 }
                 button("Зарегистрироваться") {
                     addClass(Styles.button)
                     action {
-                        authController.register("123", "123")
+                        authController.register(login.text, password.text)
                         replaceWith<BigView>()
                     }
                 }
