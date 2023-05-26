@@ -5,11 +5,12 @@ import controllers.AuthController
 import controllers.MainController
 import javafx.geometry.Pos
 import tornadofx.*
+
 class AuthView : View("Authorization window") {
     private val mainController: MainController by inject()
     private val authController: AuthController by inject()
 
-    override val root = borderpane  {
+    override val root = borderpane {
         importStylesheet<Styles>()
         addClass(Styles.base)
         top {
@@ -28,31 +29,31 @@ class AuthView : View("Authorization window") {
         }
         center {
             vbox {
+                label(authController.error)  //style this
                 label("Логин:") {
                     addClass(Styles.label2)
                 }
-                textfield {
+                val login = textfield {
                     addClass(Styles.textField)
                 }
 
                 label("Пароль:") {
                     addClass(Styles.label2)
                 }
-                passwordfield {
+                val password = passwordfield {
                     addClass(Styles.textField)
                 }
                 button("Войти") {
                     addClass(Styles.button)
                     action {
-                         authController.login("123","123")
+                        authController.login(login.text, password.text)
                         replaceWith<BigView>()
-
                     }
                 }
                 button("Зарегистрироваться") {
                     addClass(Styles.button)
                     action {
-                         authController.register("123","123")
+                        authController.register(login.text, password.text)
                         replaceWith<BigView>()
                     }
                 }

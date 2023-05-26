@@ -30,10 +30,6 @@ class ClientApp(var serverAddress: String = "localhost", var serverPort: Int = 2
             logger.info { "Произошло подключение к ${c.remoteAddress}" }
 
             channel = c
-
-            //interactor.start(this)
-
-            //stop()
         } catch (e: SocketTimeoutException) {
             logger.info { "Сервер не отвечает (${e.message})" }
         } catch (e: ConnectException) {
@@ -53,6 +49,7 @@ class ClientApp(var serverAddress: String = "localhost", var serverPort: Int = 2
             logger.info { "Попытка закрытия канала. Канала не существует." }
             return
         }
+        sendFrame(Frame(FrameType.EXIT))
         channel?.close()
         channel = null
         logger.info { "Канал закрыт" }

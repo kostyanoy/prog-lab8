@@ -2,11 +2,15 @@ package view
 
 import MapView
 import Styles
+import controllers.AuthController
+import controllers.MainController
 import javafx.geometry.Pos
 import tornadofx.*
 
 class BigView : View("Authorization window") {
-    //    private val bigController: BigController by inject()
+    private val mainController: MainController by inject()
+    private val authController: AuthController by inject()
+
     private val listView: ListView by inject()
     private val commandsView: CommandsView by inject()
     private val settingsView: SettingsView by inject()
@@ -40,7 +44,7 @@ class BigView : View("Authorization window") {
                     button("Выход") {
                         addClass(Styles.exit)
                         action {
-//                            bigController.exit()
+                            mainController.disconnect()
                             replaceWith<MainView>()
                         }
                     }
@@ -57,7 +61,6 @@ class BigView : View("Authorization window") {
                         addClass(Styles.button)
                         action {
                             center = listView.root
-
                         }
                     }
 
@@ -77,10 +80,9 @@ class BigView : View("Authorization window") {
 
                     label("  Имя пользователя  ") {
                         addClass(Styles.label2)
-                        textfield {
-                            addClass(Styles.textField)
-                            // textProperty().bind(bigController.username) реализовать в конроллере, чтобы отображалось имя пользователя(я привела просто пример свойства)
-                        }
+                    }
+                    label(authController.username) {
+                        addClass(Styles.label2)
                     }
                 }
             }

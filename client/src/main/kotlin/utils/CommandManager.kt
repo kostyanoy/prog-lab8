@@ -79,7 +79,7 @@ class CommandManager {
      */
     fun getArgs(command: String): Array<ArgumentType> {
         if (command !in commands) {
-            throw CommandException("Такой команды не существует")
+            throw CommandException("Такой команды не существует: $command")
         }
         return commands[command]!!
     }

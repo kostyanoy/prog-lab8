@@ -12,6 +12,8 @@ class MainView : View("Connection window") {
         importStylesheet<Styles>()
         addClass(Styles.base)
 
+        label(mainController.error) //style this
+
         label("Добро пожаловать! Готовы исследовать наше чудесное приложение?") {
             addClass(Styles.label1)
         }

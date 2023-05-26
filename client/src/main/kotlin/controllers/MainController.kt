@@ -2,8 +2,17 @@ package controllers
 
 import org.koin.core.component.KoinComponent
 
-class MainController : KoinComponent, ClientController() {
-    fun connect(): Boolean = client.start()
+class MainController : BaseController(), KoinComponent {
+    private val clientController: ClientController by inject()
 
-    fun disconnect() = client.stop()
+    fun connect(): Boolean {
+        error.set("")
+        val res = clientController.client.start()
+        if (!res) {
+            setErrorAndLog("Не удалось установить соединение с сервером")
+        }
+        return res
+    }
+
+    fun disconnect() = clientController.client.stop()
 }

@@ -2,8 +2,8 @@ package utils
 
 import FileManager
 import data.MusicBand
-import serialize.Serializer
 import serialize.SerializeManager
+import serialize.Serializer
 
 /**
 Implementation of [Saver] that saves and loads the collection of music bands to and from a file using [Serializer] and [FileManager].
@@ -14,7 +14,7 @@ Implementation of [Saver] that saves and loads the collection of music bands to 
  */
 class FileSaver(
     private val pathToSaveFile: String = "save.txt",
-    private val serializer: Serializer<LinkedHashMap<Int, MusicBand>> = SerializeManager(),
+    private val serializer: SerializeManager = SerializeManager(),
     private val fileManager: FileManager = FileManager()
 ) : Saver<LinkedHashMap<Int, MusicBand>> {
     override fun load(): LinkedHashMap<Int, MusicBand> =
