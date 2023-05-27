@@ -119,7 +119,6 @@ class ServerApp(
                 char = channel.socket().getInputStream().read()
             }
             val str = String(array.toByteArray())
-            logger.info { str }
             val frame = frameSerializer.deserialize(str)
             logger.info { "Получен ответ от GatewayLBService ${frame.type}" }
             return frame
