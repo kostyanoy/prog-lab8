@@ -1,5 +1,7 @@
 
 import controllers.CollectionController
+import controllers.CommandsController
+import controllers.SettingsController
 import data.MusicBand
 import javafx.animation.KeyFrame
 import javafx.animation.Timeline
@@ -13,6 +15,11 @@ import java.util.*
 
 class MapView : View() {
     private val collectionController: CollectionController by inject()
+    private val commandsController: CommandsController by inject()
+    private val settingsController: SettingsController by inject()
+
+    private val commandsView: CommandsView by inject()
+
     private var collection = collectionController.getCollection().values
     private var selectedBand: MusicBand? = null
     private val colorMap: MutableMap<String, Color> = mutableMapOf()
@@ -45,6 +52,7 @@ class MapView : View() {
                 spacing = 5.0
                 paddingAll = 5.0
                 button("Обновить") {
+                    settingsController.createStringBinding("map.updateBtn", this)
                     action {
                         collectionController.updateCollection()
                         collection = collectionController.getCollection().values
@@ -52,7 +60,10 @@ class MapView : View() {
                     }
                 }
                 button("Изменить"){
+                    settingsController.createStringBinding("map.changeBtn", this)
                     action {
+                        selectedBand?.let { commandsController.setFields(it) }
+                        commandsView.setUpdate()
                         replaceWith<CommandsView>()
                     }
 
@@ -126,9 +137,9 @@ class MapView : View() {
                 if (selectedBand != null) {
                     vbox {
                         spacing = 5.0
-                        label {
+                        label("Выбрана группа:") {
+                            settingsController.createStringBinding("map.chosenLbl", this)
                             addClass(Styles.label2)
-                            text = "Выбрана группа:"
                             style {
                                 fontWeight = FontWeight.BOLD
                             }

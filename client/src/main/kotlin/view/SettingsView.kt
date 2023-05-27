@@ -21,19 +21,9 @@ class SettingsView : View("Settings window") {
                     paddingTop = 5.0
 
                     label("Настройки") {
+                        settingsController.createStringBinding("settings.settingsLbl", this)
                         addClass(Styles.label1)
                     }
-
-                    //!_________________________________________________________!
-                    //ПРИМЕР ИСПОЛЬЗОВАНИЯ ЛОКАЛИЗАЦИИ
-                    val l = label(){
-                        settingsController.createStringBinding("example", this)
-                    }
-
-                    button(messages["example1"]) {
-                        settingsController.createStringBinding("example1", this)
-                    }
-                    //|''''''''''''''''''''''''''''''''''''''''''''''''''''''''''|
                 }
             }
         }
@@ -42,6 +32,7 @@ class SettingsView : View("Settings window") {
                 alignment = Pos.CENTER
                 hbox(spacing = 10) {
                     label("Язык:") {
+                        settingsController.createStringBinding("settings.languageLbl", this)
                         addClass(Styles.label2)
                     }
                     button("English") {
