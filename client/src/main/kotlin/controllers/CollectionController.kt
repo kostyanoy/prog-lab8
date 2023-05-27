@@ -4,12 +4,14 @@ import CommandResult
 import data.MusicBand
 import org.koin.core.component.inject
 import serialize.SerializeManager
+import tornadofx.get
 
 class CollectionController : BaseController() {
     private val serializer: SerializeManager by inject<SerializeManager>()
     private var collection: LinkedHashMap<Int, MusicBand> = LinkedHashMap()
 
     private val clientController: ClientController by inject()
+    private val settingsController: SettingsController by inject()
 
     fun getCollection() = collection
 
@@ -23,9 +25,9 @@ class CollectionController : BaseController() {
             }
 
             is CommandResult.Failure ->
-                setErrorAndLog("Ошибка при попытке получить коллекцию: ${res.throwable.message}")
+                setErrorAndLog("${settingsController.messages["collectionController.getErrorMsg"]}: ${res.throwable.message}")
 
-            null -> setErrorAndLog("Не удалось получить коллекцию")
+            null -> setErrorAndLog(settingsController.messages["collectionController.getFailMsg"])
         }
         return false
     }

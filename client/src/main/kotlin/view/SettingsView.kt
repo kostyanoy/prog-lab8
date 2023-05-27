@@ -3,7 +3,19 @@ package view
 import Styles
 import controllers.SettingsController
 import javafx.geometry.Pos
-import tornadofx.*
+import tornadofx.View
+import tornadofx.action
+import tornadofx.addClass
+import tornadofx.borderpane
+import tornadofx.button
+import tornadofx.center
+import tornadofx.hbox
+import tornadofx.importStylesheet
+import tornadofx.label
+import tornadofx.paddingRight
+import tornadofx.paddingTop
+import tornadofx.top
+import tornadofx.vbox
 
 class SettingsView : View("Settings window") {
     private val settingsController: SettingsController by inject()
@@ -21,19 +33,10 @@ class SettingsView : View("Settings window") {
                     paddingTop = 5.0
 
                     label("Настройки") {
-                           addClass(Styles.label1)
+                        addClass(Styles.label1)
+                        settingsController.createStringBinding("settings.settingsLbl", this)
+                        addClass(Styles.label1)
                     }
-
-                    //!_________________________________________________________!
-                    //ПРИМЕР ИСПОЛЬЗОВАНИЯ ЛОКАЛИЗАЦИИ
-                    val l = label(){
-                        settingsController.createStringBinding("example", this)
-                    }
-
-                    button(messages["example1"]) {
-                        settingsController.createStringBinding("example1", this)
-                    }
-                    //|''''''''''''''''''''''''''''''''''''''''''''''''''''''''''|
                 }
             }
         }
@@ -42,6 +45,7 @@ class SettingsView : View("Settings window") {
                 alignment = Pos.CENTER
                 hbox(spacing = 10) {
                     label("Язык:") {
+                        settingsController.createStringBinding("settings.languageLbl", this)
                         addClass(Styles.label2)
                     }
                     button("English") {

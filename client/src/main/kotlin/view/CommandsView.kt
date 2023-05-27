@@ -1,8 +1,8 @@
 package  view
 
-import ArgumentType
 import Styles
 import controllers.CommandsController
+import controllers.SettingsController
 import javafx.geometry.Pos
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -18,9 +18,16 @@ class CommandsView : View("Settings window"), KoinComponent {
     private val emptyView: CommandView.EmptyView by inject()
 
     private val commandsController: CommandsController by inject()
+    private val settingsController: SettingsController by inject()
+
     private val commandManager: CommandManager by inject<CommandManager>()
 
     private var current: String? = null
+
+    fun setUpdate() {
+        root.center = allView.root
+        current = "update"
+    }
 
     override val root = borderpane {
         importStylesheet<Styles>()
@@ -30,6 +37,7 @@ class CommandsView : View("Settings window"), KoinComponent {
             left {
                 vbox(spacing = 5) {
                     label("Команды") {
+                        settingsController.createStringBinding("commands.commandsLbl", this)
                         addClass(Styles.label2)
                     }
                     button("Clear") {
@@ -129,6 +137,8 @@ class CommandsView : View("Settings window"), KoinComponent {
                         addClass(Styles.label1)
                     }
                     button("Отправить") {
+                        settingsController.createStringBinding("commands.sendBtn", this)
+                        addClass(Styles.button)
                         action {
                             if (current != null) {
                                 commandsController.sendCommand(current!!, commandManager.getArgs(current!!))
@@ -140,15 +150,15 @@ class CommandsView : View("Settings window"), KoinComponent {
                     }
                 }
             }
-
         }
     }
 }
 
-sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
+sealed class CommandView : View() {
     protected val commandsController: CommandsController by inject()
+    protected val settingsController: SettingsController by inject()
 
-    class EmptyView : CommandView(arrayOf()) {
+    class EmptyView : CommandView() {
         override val root = vbox {
             importStylesheet<Styles>()
             addClass(Styles.base)
@@ -156,19 +166,21 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
             hbox {
                 alignment = Pos.CENTER
                 label("Вы уверены?") {
+                    settingsController.createStringBinding("commands.confirmLbl", this)
                     addClass(Styles.label2)
                 }
             }
         }
     }
 
-    class FilterView : CommandView(arrayOf(ArgumentType.GENRE)) {
+    class FilterView : CommandView() {
         override val root = vbox {
             importStylesheet<Styles>()
             addClass(Styles.base)
 
             hbox {
                 label("Введите жанр (PROGRESSIVE_ROCK, HIP_HOP, PSYCHEDELIC_CLOUD_RAP, SOUL, POST_PUNK): ") {
+                    settingsController.createStringBinding("commands.genreLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -178,12 +190,14 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
         }
     }
 
-    class KeyView : CommandView(arrayOf(ArgumentType.INT)) {
+    class KeyView : CommandView() {
         override val root = vbox {
             importStylesheet<Styles>()
             addClass(Styles.base)
+
             hbox {
                 label("Вы должны ввести аргумент типа число:") {
+                    settingsController.createStringBinding("commands.keyLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -193,12 +207,13 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
         }
     }
 
-    class RemoveGreaterView : CommandView(arrayOf(ArgumentType.MUSIC_BAND)) {
+    class RemoveGreaterView : CommandView() {
         override val root = vbox(spacing = 5) {
             importStylesheet<Styles>()
             addClass(Styles.base)
             hbox {
                 label("Введите название банды:") {
+                    settingsController.createStringBinding("commands.bandNameLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -208,6 +223,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
 
             hbox {
                 label("Введите координату Х (<=552):") {
+                    settingsController.createStringBinding("commands.xLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -217,6 +233,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
 
             hbox {
                 label("Введите координату Y:") {
+                    settingsController.createStringBinding("commands.yLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -226,6 +243,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
 
             hbox {
                 label("Введите количество участников:") {
+                    settingsController.createStringBinding("commands.participantsLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -235,6 +253,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
 
             hbox {
                 label("Введите количество альбомов (может быть пустым):") {
+                    settingsController.createStringBinding("commands.albumsLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -244,6 +263,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
 
             hbox {
                 label("Введите описание банды:") {
+                    settingsController.createStringBinding("commands.descriptionLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -253,6 +273,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
 
             hbox {
                 label("Введите жанр (PROGRESSIVE_ROCK, HIP_HOP, PSYCHEDELIC_CLOUD_RAP, SOUL, POST_PUNK): ") {
+                    settingsController.createStringBinding("commands.genreLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -262,6 +283,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
 
             hbox {
                 label("Введите название лучшего альбома (может быть пустым):") {
+                    settingsController.createStringBinding("commands.bestAlbumNameLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -271,6 +293,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
 
             hbox {
                 label("Введите длительность альбома:") {
+                    settingsController.createStringBinding("commands.bestAlbumLengthLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -280,12 +303,13 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
         }
     }
 
-    class DescriptionView : CommandView(arrayOf(ArgumentType.STRING)) {
+    class DescriptionView : CommandView() {
         override val root = vbox {
             importStylesheet<Styles>()
             addClass(Styles.base)
             hbox {
                 label("Вы должны ввести аргумент типа строка:") {
+                    settingsController.createStringBinding("commands.descriptionLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -295,13 +319,14 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
         }
     }
 
-    class AllView : CommandView(arrayOf(ArgumentType.INT, ArgumentType.MUSIC_BAND)) {
+    class AllView : CommandView() {
         override val root = vbox(spacing = 5) {
             importStylesheet<Styles>()
             addClass(Styles.base)
 
             hbox {
                 label("Вы должны ввести аргумент типа число:") {
+                    settingsController.createStringBinding("commands.keyLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -311,6 +336,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
 
             hbox {
                 label("Введите название банды:") {
+                    settingsController.createStringBinding("commands.bandNameLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -320,6 +346,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
 
             hbox {
                 label("Введите координату Х (<=552):") {
+                    settingsController.createStringBinding("commands.xLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -329,6 +356,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
 
             hbox {
                 label("Введите координату Y:") {
+                    settingsController.createStringBinding("commands.yLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -338,6 +366,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
 
             hbox {
                 label("Введите количество участников:") {
+                    settingsController.createStringBinding("commands.participantsLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -347,6 +376,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
 
             hbox {
                 label("Введите количество альбомов (может быть пустым):") {
+                    settingsController.createStringBinding("commands.albumsLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -356,6 +386,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
 
             hbox {
                 label("Введите описание банды:") {
+                    settingsController.createStringBinding("commands.descriptionLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -365,6 +396,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
 
             hbox {
                 label("Введите жанр (PROGRESSIVE_ROCK, HIP_HOP, PSYCHEDELIC_CLOUD_RAP, SOUL, POST_PUNK): ") {
+                    settingsController.createStringBinding("commands.genreLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -374,6 +406,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
 
             hbox {
                 label("Введите название лучшего альбома (может быть пустым):") {
+                    settingsController.createStringBinding("commands.bestAlbumNameLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {
@@ -383,6 +416,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
 
             hbox {
                 label("Введите длительность альбома:") {
+                    settingsController.createStringBinding("commands.bestAlbumLengthLbl", this)
                     addClass(Styles.label2)
                 }
                 textfield() {

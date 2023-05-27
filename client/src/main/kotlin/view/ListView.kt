@@ -2,6 +2,8 @@ package view
 
 import Styles
 import controllers.CollectionController
+import controllers.CommandsController
+import controllers.SettingsController
 import data.MusicBand
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleObjectProperty
@@ -11,6 +13,11 @@ import tornadofx.*
 
 class ListView : View() {
     private val collectionController: CollectionController by inject()
+    private val commandsController: CommandsController by inject()
+    private val settingsController: SettingsController by inject()
+
+    private val commandsView: CommandsView by inject()
+
     private val musicBands = FXCollections.observableArrayList<MusicBand>()
 
     override val root = borderpane {
@@ -32,11 +39,20 @@ class ListView : View() {
             column("Best Album", MusicBand::bestAlbumProperty)
             column("Creation Time", MusicBand::creationTimeProperty)
             column("Owner", MusicBand::ownerProperty)
+
+            onDoubleClick {
+                if (selectedItem == null){
+                    return@onDoubleClick
+                }
+                commandsController.setFields(selectedItem!!)
+                commandsView.setUpdate()
+                replaceWith<CommandsView>()
+            }
         }
 
         left = button("Обновить таблицу") {
             action {
-                collectionController.updateCollection()
+                settingsController.createStringBinding("list.updateBtn", this)
                 updateTable()
             }
         }
@@ -44,6 +60,7 @@ class ListView : View() {
 
     private fun updateTable() {
         musicBands.clear()
+        collectionController.updateCollection()
         collectionController.getCollection().values.forEach { musicBands.add(it as MusicBand?) }
     }
 }

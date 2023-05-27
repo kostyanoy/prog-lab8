@@ -2,7 +2,6 @@ import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import serialize.FrameSerializer
-import utils.Interactor
 import java.net.ConnectException
 import java.net.InetSocketAddress
 import java.net.SocketTimeoutException
@@ -12,7 +11,6 @@ import java.nio.channels.SocketChannel
  * Class of the application, uses the DI to get parameters
  */
 class ClientApp(var serverAddress: String = "localhost", var serverPort: Int = 2228) : KoinComponent {
-    private val interactor by inject<Interactor>()
     private val frameSerializer by inject<FrameSerializer>()
     private val logger = KotlinLogging.logger {}
 
@@ -21,11 +19,11 @@ class ClientApp(var serverAddress: String = "localhost", var serverPort: Int = 2
     /**
      * Connects to the server
      */
-    fun start() : Boolean {
+    fun start(): Boolean {
         try {
             val c = SocketChannel.open()
             c.socket().connect(InetSocketAddress(serverAddress, serverPort), 5000)
-            c.socket()?.soTimeout = 5000 // timeout for server respond
+            c.socket()?.soTimeout = 10000 // timeout for server respond
 
             logger.info { "Произошло подключение к ${c.remoteAddress}" }
 
@@ -74,7 +72,7 @@ class ClientApp(var serverAddress: String = "localhost", var serverPort: Int = 2
      *
      * @param frame which should be sent
      */
-    fun sendFrame(frame: Frame) : Boolean {
+    fun sendFrame(frame: Frame): Boolean {
         if (channel == null) {
             logger.info { "Попытка отправки сообщения на канал. Канала не существует." }
             return false

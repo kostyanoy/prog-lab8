@@ -7,10 +7,13 @@ import data.Coordinates
 import data.MusicBand
 import data.MusicGenre
 import javafx.beans.property.SimpleStringProperty
-import tornadofx.*
+import tornadofx.get
+import tornadofx.stringProperty
 
 class CommandsController : BaseController() {
     private val clientController: ClientController by inject()
+    private val collectionController: CollectionController by inject()
+    private val settingsController: SettingsController by inject()
 
     val output = SimpleStringProperty()
 
@@ -25,7 +28,7 @@ class CommandsController : BaseController() {
     val bestAlbumName = stringProperty()
     val bestAlbumLength = stringProperty()
 
-    fun sendCommand(command: String, argumentTypes: Array<ArgumentType>) : Boolean {
+    fun sendCommand(command: String, argumentTypes: Array<ArgumentType>): Boolean {
         output.value = ""
         error.value = ""
         val commandArgs = arrayListOf<Any>()
@@ -37,22 +40,24 @@ class CommandsController : BaseController() {
                 ArgumentType.MUSIC_BAND -> checkMusicBand()
             } as Any?
             if (a == null) {
-                setErrorAndLog("Заполните правильно все необходимые поля")
+                setErrorAndLog(settingsController.messages["commandsController.blankFieldMsg"])
                 return false
             }
             commandArgs.add(a)
         }
 
-        when (val res = clientController.executeCommand(command, commandArgs.toArray())){
+        when (val res = clientController.executeCommand(command, commandArgs.toArray())) {
             is CommandResult.Success -> {
                 output.value = res.message ?: "Команда выполнена"
                 return true
             }
+
             is CommandResult.Failure -> {
                 res.throwable.message?.let { setErrorAndLog(it) }
             }
+
             null -> {
-                setErrorAndLog("Сервер вернул непотребщину")
+                setErrorAndLog(settingsController.messages["commandsController.errorMsg"])
             }
         }
         return false
@@ -69,6 +74,22 @@ class CommandsController : BaseController() {
         genre.value = null
         bestAlbumName.value = null
         bestAlbumLength.value = null
+    }
+
+    fun setFields(element: MusicBand) {
+        val collection = collectionController.getCollection()
+        val _key = collection.filterValues { it == element }.keys.firstOrNull() ?: return
+
+        key.value = _key.toString()
+        name.value = element.name
+        x.value = element.coordinates.x.toString()
+        y.value = element.coordinates.y.toString()
+        participants.value = element.numberOfParticipants.toString()
+        albums.value = element.albumsCount.toString()
+        description.value = element.description
+        genre.value = element.genre.toString()
+        bestAlbumName.value = element.bestAlbum?.name
+        bestAlbumLength.value = element.bestAlbum?.length.toString()
     }
 
     private fun checkInt(): Int? {
@@ -91,7 +112,8 @@ class CommandsController : BaseController() {
         }
 
         if (name.value.isBlank() || x.value.toFloatOrNull() == null || y.value.toDoubleOrNull() == null || participants.value.toIntOrNull() == null ||
-            MusicGenre.valueOfOrNull(genre.value.uppercase()) == null) {
+            MusicGenre.valueOfOrNull(genre.value.uppercase()) == null
+        ) {
             return null
         }
 

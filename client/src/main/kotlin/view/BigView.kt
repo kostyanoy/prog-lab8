@@ -4,12 +4,14 @@ import MapView
 import Styles
 import controllers.AuthController
 import controllers.MainController
+import controllers.SettingsController
 import javafx.geometry.Pos
 import tornadofx.*
 
 class BigView : View("Authorization window") {
     private val mainController: MainController by inject()
     private val authController: AuthController by inject()
+    private val settingsController: SettingsController by inject()
 
     private val listView: ListView by inject()
     private val commandsView: CommandsView by inject()
@@ -29,12 +31,14 @@ class BigView : View("Authorization window") {
                     paddingTop = 5.0
 
                     button("Настройки") {
+                        settingsController.createStringBinding("big.settingsBtn", this)
                         addClass(Styles.settings)
                         action {
                             center = settingsView.root
                         }
                     }
                     button("Выход") {
+                        settingsController.createStringBinding("big.exitBtn", this)
                         addClass(Styles.exit)
                         action {
                             mainController.disconnect()
@@ -51,24 +55,31 @@ class BigView : View("Authorization window") {
                     paddingTop = 20.0
 
                     button("Список") {
+                        settingsController.createStringBinding("big.listBtn", this)
+                        addClass(Styles.button)
                         action {
                             center = listView.root
                         }
                     }
 
                     button("Карта") {
+                        settingsController.createStringBinding("big.mapBtn", this)
+                        addClass(Styles.button)
                         action {
                             center = mapView.root
                         }
                     }
 
                     button("Команды") {
+                        settingsController.createStringBinding("big.commandBtn", this)
+                        addClass(Styles.button)
                         action {
                             center = commandsView.root
                         }
                     }
 
-                    label("  Имя пользователя: ") {
+                    label("  Имя пользователя:  ") {
+                        settingsController.createStringBinding("big.usernameLbl", this)
                         addClass(Styles.label2)
                     }
                     label(authController.username) {

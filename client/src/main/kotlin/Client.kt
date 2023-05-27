@@ -19,20 +19,6 @@ fun main(args: Array<String>) {
     }
 
     logger.info { "Выбран порт: $serverPort" }
-
-    // this should make reconnect to the server possible
-    // connect - tries to reconnect
-    // exit    - stops the application
-//    var command = "connect"
-
     MyApp().main("localhost", 2228)
-//    while (command != "exit") {
-//        if (command == "connect") {
-//            ClientApp("localhost", serverPort).start()
-//            logger.info { "Клиент закрылся" }
-//        }
-//        print("connect or exit: ")
-//        command = readln()
-//    }
 }
 
