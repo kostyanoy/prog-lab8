@@ -8,7 +8,7 @@ import view.MainView
 
 class MyApp(): App(MainView::class), KoinComponent{
     override fun start(stage: Stage) {
-        stage.width = 1000.0
+        stage.width = 1100.0
         stage.height = 800.0
         super.start(stage)
     }

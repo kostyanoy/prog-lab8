@@ -11,12 +11,18 @@ class Styles : Stylesheet() {
         val base by cssclass()
         val exit by cssclass()
         val settings by cssclass()
-    }
+        val error by cssclass()
 
+    }
     init {
         base{
             backgroundColor += c("#F5EFE4")
             padding = box(20.px)
+        }
+        error {
+            fontSize = 20.px
+            fontWeight = FontWeight.BOLD
+            textFill = c("#FF0000")
         }
         label1 {
             fontSize = 20.px
@@ -62,5 +68,6 @@ class Styles : Stylesheet() {
             backgroundColor += c("#403A37")
 
         }
+
     }
 }

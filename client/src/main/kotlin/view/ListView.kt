@@ -13,17 +13,13 @@ class ListView : View() {
     private val collectionController: CollectionController by inject()
     private val musicBands = FXCollections.observableArrayList<MusicBand>()
 
-    override fun onDock() {
-        super.onDock()
-//        collectionController.updateCollection()
-    }
-
-
     override val root = borderpane {
         importStylesheet<Styles>()
         addClass(Styles.base)
 
-        label(collectionController.error) //style this
+        label(collectionController.error) {
+            addClass(Styles.error)
+        }
 
         center = tableview(musicBands) {
             column("ID", MusicBand::idProperty)

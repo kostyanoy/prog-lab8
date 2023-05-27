@@ -13,6 +13,7 @@ class AuthView : View("Authorization window") {
     override val root = borderpane {
         importStylesheet<Styles>()
         addClass(Styles.base)
+
         top {
             hbox {
                 alignment = Pos.TOP_RIGHT
@@ -29,7 +30,10 @@ class AuthView : View("Authorization window") {
         }
         center {
             vbox {
-                label(authController.error)  //style this
+                importStylesheet<Styles>()
+                label(authController.error) {
+                    addClass(Styles.error)
+                }
                 label("Логин:") {
                     addClass(Styles.label2)
                 }
@@ -46,15 +50,16 @@ class AuthView : View("Authorization window") {
                 button("Войти") {
                     addClass(Styles.button)
                     action {
-                        authController.login(login.text, password.text)
-                        replaceWith<BigView>()
+                        if (authController.login(login.text, password.text)) {
+                            replaceWith<BigView>()
+                        }
                     }
                 }
                 button("Зарегистрироваться") {
-                    addClass(Styles.button)
                     action {
-                        authController.register(login.text, password.text)
-                        replaceWith<BigView>()
+                        if (authController.register(login.text, password.text)) {
+                            replaceWith<BigView>()
+                        }
                     }
                 }
                 style {

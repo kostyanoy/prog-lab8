@@ -16,13 +16,6 @@ class BigView : View("Authorization window") {
     private val settingsView: SettingsView by inject()
     private val mapView: MapView by inject()
 
-
-
-    init {
-        primaryStage.width = 1000.0
-        primaryStage.height = 700.0
-    }
-
     override val root = borderpane {
         importStylesheet<Styles>()
         addClass(Styles.base)
@@ -58,27 +51,24 @@ class BigView : View("Authorization window") {
                     paddingTop = 20.0
 
                     button("Список") {
-                        addClass(Styles.button)
                         action {
                             center = listView.root
                         }
                     }
 
                     button("Карта") {
-                        addClass(Styles.button)
                         action {
                             center = mapView.root
                         }
                     }
 
                     button("Команды") {
-                        addClass(Styles.button)
                         action {
                             center = commandsView.root
                         }
                     }
 
-                    label("  Имя пользователя  ") {
+                    label("  Имя пользователя: ") {
                         addClass(Styles.label2)
                     }
                     label(authController.username) {

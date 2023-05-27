@@ -21,7 +21,7 @@ class SettingsView : View("Settings window") {
                     paddingTop = 5.0
 
                     label("Настройки") {
-                        addClass(Styles.label1)
+                           addClass(Styles.label1)
                     }
 
                     //!_________________________________________________________!

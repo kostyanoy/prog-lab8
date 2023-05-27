@@ -18,12 +18,13 @@ class MapView : View() {
     private val colorMap: MutableMap<String, Color> = mutableMapOf()
 
     override val root = borderpane {
+        importStylesheet<Styles>()
         addClass(Styles.base)
 
         center {
             vbox {
                 val canvas = Canvas()
-                canvas.width = 400.0
+                canvas.width = 500.0
                 canvas.height = 400.0
                 canvas.graphicsContext2D.stroke = Color.BLACK
                 canvas.graphicsContext2D.lineWidth = 1.0
@@ -66,8 +67,8 @@ class MapView : View() {
     }
     private fun updateLabels() {
         val canvas = Canvas()
-        canvas.width = 400.0
-        canvas.height = 300.0
+        canvas.width = 500.0
+        canvas.height = 400.0
 
         val graphics= canvas.graphicsContext2D
         graphics.stroke = Color.BLACK
@@ -147,8 +148,11 @@ class MapView : View() {
                     |Creation Time: ${selectedBand!!.creationTime}
                     |Owner: ${selectedBand!!.owner}
                 """.trimMargin()
-                            prefWidth = 400.0
-                            prefHeight = 300.0
+                            prefWidth = 500.0
+                            prefHeight = 400.0
+                            style {
+                                fontSize = 18.px
+                            }
                         }
                     }
                 }

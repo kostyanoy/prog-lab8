@@ -12,20 +12,20 @@ class MainView : View("Connection window") {
         importStylesheet<Styles>()
         addClass(Styles.base)
 
-        label(mainController.error) //style this
-
+        label(mainController.error) {
+            addClass(Styles.error)
+        }
         label("Добро пожаловать! Готовы исследовать наше чудесное приложение?") {
             addClass(Styles.label1)
         }
         button("Конечно!") {
-            addClass(Styles.button)
             action {
-                mainController.connect()
-                replaceWith<AuthView>()
+                if (mainController.connect()) {
+                    replaceWith<AuthView>()
+                }
             }
         }
         button("В следующий раз(") {
-            addClass(Styles.button)
             action {
                 currentStage?.close()
             }

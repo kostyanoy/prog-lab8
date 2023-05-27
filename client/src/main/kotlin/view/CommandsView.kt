@@ -22,11 +22,6 @@ class CommandsView : View("Settings window"), KoinComponent {
 
     private var current: String? = null
 
-    init {
-        primaryStage.width = 1000.0
-        primaryStage.height = 800.0
-    }
-
     override val root = borderpane {
         importStylesheet<Styles>()
         addClass(Styles.base)
@@ -34,100 +29,118 @@ class CommandsView : View("Settings window"), KoinComponent {
         top {
             left {
                 vbox(spacing = 5) {
-                    label(commandsController.error) //style this
-                    label(commandsController.output) //style this
                     label("Команды") {
                         addClass(Styles.label2)
                     }
                     button("Clear") {
-                        addClass(Styles.button)
                         action {
                             center = emptyView.root
                             current = "clear"
                             commandsController.clearFields()
+                            commandsController.error.value = ""
+                            commandsController.output.value = ""
                         }
                     }
                     button("CountGreaterThanDescription") {
-                        addClass(Styles.button)
                         action {
                             center = descriptionView.root
                             current = "count_greater_than_description"
                             commandsController.clearFields()
+                            commandsController.error.value = ""
+                            commandsController.output.value = ""
                         }
                     }
                     button("FilterLessThanGenre") {
-                        addClass(Styles.button)
                         action {
                             center = filterView.root
                             current = "filter_less_than_genre"
                             commandsController.clearFields()
+                            commandsController.error.value = ""
+                            commandsController.output.value = ""
                         }
                     }
                     button("Insert") {
-                        addClass(Styles.button)
                         action {
                             center = allView.root
                             current = "insert"
                             commandsController.clearFields()
+                            commandsController.error.value = ""
+                            commandsController.output.value = ""
                         }
                     }
                     button("RemoveGreater") {
-                        addClass(Styles.button)
                         action {
                             center = removeGreaterView.root
                             current = "remove_greater"
                             commandsController.clearFields()
+                            commandsController.error.value = ""
+                            commandsController.output.value = ""
                         }
                     }
                     button("RemoveGreaterKey") {
-                        addClass(Styles.button)
                         action {
                             center = keyView.root
                             current = "remove_greater_key"
                             commandsController.clearFields()
+                            commandsController.error.value = ""
+                            commandsController.output.value = ""
                         }
                     }
                     button("RemoveKey") {
-                        addClass(Styles.button)
                         action {
                             center = keyView.root
                             current = "remove_key"
                             commandsController.clearFields()
+                            commandsController.error.value = ""
+                            commandsController.output.value = ""
                         }
                     }
                     button("ReplaceIfLowe") {
-                        addClass(Styles.button)
                         action {
                             center = allView.root
                             current = "replace_if_lowe"
                             commandsController.clearFields()
+                            commandsController.error.value = ""
+                            commandsController.output.value = ""
                         }
                     }
                     button("Update") {
-                        addClass(Styles.button)
                         action {
                             center = allView.root
                             current = "update"
                             commandsController.clearFields()
+                            commandsController.error.value = ""
+                            commandsController.output.value = ""
                         }
                     }
                 }
             }
-
             bottom {
                 vbox {
                     alignment = Pos.CENTER
+                    label("Смотреть сюда") {
+                    addClass(Styles.label2)}
 
+                    label(commandsController.error) {
+                        addClass(Styles.error)
+                    }
+
+                    label(commandsController.output) {
+                        addClass(Styles.label1)
+                    }
                     button("Отправить") {
-                        addClass(Styles.button)
                         action {
-                            if (current != null){
+                            if (current != null) {
                                 commandsController.sendCommand(current!!, commandManager.getArgs(current!!))
                             }
                         }
                     }
+                    vboxConstraints {
+                        marginTop = 10.0
+                    }
                 }
             }
+
         }
     }
 }
@@ -141,6 +154,7 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
             addClass(Styles.base)
 
             hbox {
+                alignment = Pos.CENTER
                 label("Вы уверены?") {
                     addClass(Styles.label2)
                 }
@@ -168,7 +182,6 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
         override val root = vbox {
             importStylesheet<Styles>()
             addClass(Styles.base)
-
             hbox {
                 label("Вы должны ввести аргумент типа число:") {
                     addClass(Styles.label2)
@@ -271,7 +284,6 @@ sealed class CommandView(val argumentTypes: Array<ArgumentType>) : View() {
         override val root = vbox {
             importStylesheet<Styles>()
             addClass(Styles.base)
-
             hbox {
                 label("Вы должны ввести аргумент типа строка:") {
                     addClass(Styles.label2)
